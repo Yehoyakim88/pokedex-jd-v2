@@ -1,0 +1,80 @@
+body {
+    margin: 0;
+    background-color: rgba(190, 187, 187, 1);
+}
+
+.headerSub {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.headerSub img {
+    margin: 32px;
+}
+
+.hovereffect:hover {
+    cursor: pointer;
+    filter: brightness(0.5);
+}
+
+.main {
+    background-color: rgb(224,15,43);
+    border-radius: 10px;
+    /* height: 100vh; */
+    margin: 20px;
+}
+
+.pokeContent {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+.pokeCard {
+    padding: 16px;
+    margin: 16px;
+    height: 200px;
+    width: 200px;
+    border-radius: 20px;
+    /* background-color: rgb(33, 30, 166); */
+    background-image: url('./img/pokeball.png');
+    background-size: 200px 200px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.zoom {
+    transition: transform .2s; /* Animation */
+}
+
+.zoom:hover {
+    transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+    cursor: pointer;
+}
+
+
+/* .pokeCard:hover {
+    cursor: pointer;
+    filter: brightness(1.2);
+} */
+
+.cardTop {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.cardBottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pokeImage {
+    width: 128px;
+    height: 128px;
+    object-fit: cover;
+    align-self: center;
+}
