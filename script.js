@@ -1,5 +1,40 @@
 const POKECARD_HEIGHT = "200";
 const POKECARD_WIDTH = "200";
+const POKETYPE_COLORS = {
+                          "grass" : "#78FF81",
+                          "fire" : "#E62600",
+                          "water" :"#0080FF",
+                          "bug" : "#FFDD99",
+                          "normal" : "#FFFFFF",
+                          "poison" : "#00FF00",
+                          "electric" : "#FFFF33",
+                          "ground" : "#996600",
+                          "fairy" : "#FFB3FF",
+                          "fighting": "#00CCAA",
+                          "psychic" : "#FF8C19",
+                          "rock" : "#808080",
+                          "ghost" : "#9900E6",
+                          "ice" :"#9900E6",
+                          "dragon" : "#002E63"
+};
+
+const POKETYPE_FONT_COLORS = {
+                            "grass" : "#000000",
+                            "fire" : "#FFFFFF",
+                            "water" :"#FFFFFF",
+                            "bug" : "#000000",
+                            "normal" : "#000000",
+                            "poison" : "#000000",
+                            "electric" : "#000000",
+                            "ground" : "#FFFFFF",
+                            "fairy" : "#FFFFFF",
+                            "fighting": "#FFFFFF",
+                            "psychic" : "#000000",
+                            "rock" : "#FFFFFF",
+                            "ghost" : "#FFFFFF",
+                            "ice" :"#FFFFFF",
+                            "dragon" : "#FFFFFF"
+};
 
 let pokeImages = [];
 let pokeNames = [];
@@ -61,6 +96,7 @@ async function loadPokemon() {
 
 function drawPokeCard(pokeName, pokeNumber, pokeImage, pokeSpecies) {
   let content = document.getElementById("poke-content");
+  
   content.innerHTML += /*html*/ `
   <div id="pokemon-id-${pokeNumber}" class="pokemon zoom">
     <div id="poke-header-${pokeNumber}" class="pokeHeader">
@@ -73,4 +109,8 @@ function drawPokeCard(pokeName, pokeNumber, pokeImage, pokeSpecies) {
     <div id="poke-type-${pokeNumber}" class="pokeType">${pokeSpecies}</div>
  </div>
  `;
+ document.getElementById(`poke-header-${pokeNumber}`).setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
+ document.getElementById(`poke-type-${pokeNumber}`).setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
+ document.getElementById(`poke-header-${pokeNumber}`).style.color = POKETYPE_FONT_COLORS[pokeSpecies];
+ document.getElementById(`poke-type-${pokeNumber}`).style.color = POKETYPE_FONT_COLORS[pokeSpecies];
 }
