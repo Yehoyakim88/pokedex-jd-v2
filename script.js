@@ -36,9 +36,10 @@ const POKETYPE_FONT_COLORS = {
                             "dragon" : "#FFFFFF"
 };
 
-let pokeImages = [];
-let pokeNames = [];
-let pokeNumbers = [];
+let pokemonsArray = [];
+let pokeImagesArray = [];
+let pokeNamesArray = [];
+
 
 async function includeHTML() {
   let includeElements = document.querySelectorAll("[w3-include-html]");
@@ -54,10 +55,6 @@ async function includeHTML() {
   }
 }
 
-// function testCards() {
-
-// //   loadPokemon('1');
-// }
 
 async function loadPokemon() {
   let url;
@@ -68,9 +65,8 @@ async function loadPokemon() {
   let pokemonSpecies;
 
   let content = document.getElementById("poke-content");
-  let resultArray = [];
-  let name;
-  let image;
+ 
+ 
 
   url = "https://pokeapi.co/api/v2/pokemon/charmander"
   response = await fetch(url);
@@ -84,9 +80,14 @@ async function loadPokemon() {
 
     response = await fetch(url);
     responseAsJson = await response.json();
+
     pokemonName = responseAsJson["name"];
     pokemonImage = responseAsJson["sprites"]["other"]["official-artwork"]["front_default"];
     pokemonSpecies = responseAsJson["types"][0]["type"]["name"];
+
+    pokemonsArray.push(responseAsJson);
+    pokeImagesArray.push(pokemonImage);
+    pokeNamesArray.push(pokemonName);
 
     // pokemonName = responseAsJson['forms']['name'];
     console.log(pokemonImage);
@@ -98,7 +99,7 @@ function drawPokeCard(pokeName, pokeNumber, pokeImage, pokeSpecies) {
   let content = document.getElementById("poke-content");
   
   content.innerHTML += /*html*/ `
-  <div id="pokemon-id-${pokeNumber}" class="pokemon zoom">
+  <div id="pokemon-id-${pokeNumber}" class="pokemon zoom" onclick="openDetails(${pokeNumber})">
     <div id="poke-header-${pokeNumber}" class="pokeHeader">
       <span id="poke-number-${pokeNumber}" class="pokeHeaderSub">#${pokeNumber}</span>
       <span id="poke-name-${pokeNumber}" class="pokeHeaderSub">${pokeName}</span>
@@ -113,4 +114,26 @@ function drawPokeCard(pokeName, pokeNumber, pokeImage, pokeSpecies) {
  document.getElementById(`poke-type-${pokeNumber}`).setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
  document.getElementById(`poke-header-${pokeNumber}`).style.color = POKETYPE_FONT_COLORS[pokeSpecies];
  document.getElementById(`poke-type-${pokeNumber}`).style.color = POKETYPE_FONT_COLORS[pokeSpecies];
+}
+
+
+function openDetails(pokeNumber) {
+  document.getElementById('poke-content').innerHTML = /*html*/ `
+  <div class="pokedex">
+    <img id="poke-image-${pokeNumber}" class="pokeImage" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
+  </div>
+  `;
+  
+
+document.getElementById('poke-content').innerHTML += /*html*/ `
+<div class="infoContainer">Lala</div>
+`;
+}
+
+
+function renderPokeImage(pokeNumber) {
+ return /*html*/ `
+  <div id="poke-image-container-${pokeNumber}" class="pokeImageContainer">
+      <img id="poke-image-${pokeNumber}" class="pokeImage" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
+  </div>`;
 }

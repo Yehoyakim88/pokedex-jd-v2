@@ -3,6 +3,10 @@ body {
     background-color: rgba(190, 187, 187, 1);
 }
 
+.d-none {
+    display: none;
+}
+
 .zoom {
     transition: transform .2s; /* Animation */
 }
@@ -76,8 +80,6 @@ body {
     padding: 16px;
 }
 
-
-
 .pokeImageContainer {
     height: fit-content;
     width: fit-content;
@@ -99,4 +101,24 @@ body {
     margin: 16px;
     border-radius: 20px;
     border: solid 1px rgb(0, 0, 0);
+}
+
+/* detail view of Pokemons */
+.pokedex {
+    min-height: 50vh;
+    background-color: rgb(219, 33, 33);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    width: 100%;
+}
+
+.infoContainer {
+    background-color: white;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    margin-top: -40px;
 }
