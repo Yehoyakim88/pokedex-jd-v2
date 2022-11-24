@@ -1,45 +1,64 @@
 const POKECARD_HEIGHT = "200";
 const POKECARD_WIDTH = "200";
 const POKETYPE_COLORS = {
-                          "grass" : "#78FF81",
-                          "fire" : "#E62600",
-                          "water" :"#0080FF",
-                          "bug" : "#FFDD99",
-                          "normal" : "#FFFFFF",
-                          "poison" : "#00FF00",
-                          "electric" : "#FFFF33",
-                          "ground" : "#996600",
-                          "fairy" : "#FFB3FF",
-                          "fighting": "#00CCAA",
-                          "psychic" : "#FF8C19",
-                          "rock" : "#808080",
-                          "ghost" : "#9900E6",
-                          "ice" :"#9900E6",
-                          "dragon" : "#002E63"
+  grass: "#78FF81",
+  fire: "#E62600",
+  water: "#0080FF",
+  bug: "#FFDD99",
+  normal: "#FFFFFF",
+  poison: "#00FF00",
+  electric: "#FFFF33",
+  ground: "#996600",
+  fairy: "#FFB3FF",
+  fighting: "#00CCAA",
+  psychic: "#FF8C19",
+  rock: "#808080",
+  ghost: "#9900E6",
+  ice: "#9900E6",
+  dragon: "#002E63",
 };
 
+const POKETYPE_DETAILS_COLORS = {
+  // 
+  grass: "#bffcc3",
+  fire: "#d85237",
+  water: "#6ab3fc",
+  bug: "#fff4df",
+  normal: "#bebbbb",
+  poison: "#a1ffa1",
+  electric: "#ffff9f",
+  ground: "#bea064",
+  fairy: "#fbe1fb",
+  fighting: "#a4fff0",
+  psychic: "#ffd0a1",
+  rock: "#d2d1d1",
+  ghost: "#e5b1ff",
+  ice: "#9900E6",
+  dragon: "#497db9"
+}
+
 const POKETYPE_FONT_COLORS = {
-                            "grass" : "#000000",
-                            "fire" : "#FFFFFF",
-                            "water" :"#FFFFFF",
-                            "bug" : "#000000",
-                            "normal" : "#000000",
-                            "poison" : "#000000",
-                            "electric" : "#000000",
-                            "ground" : "#FFFFFF",
-                            "fairy" : "#FFFFFF",
-                            "fighting": "#FFFFFF",
-                            "psychic" : "#000000",
-                            "rock" : "#FFFFFF",
-                            "ghost" : "#FFFFFF",
-                            "ice" :"#FFFFFF",
-                            "dragon" : "#FFFFFF"
+  grass: "#000000",
+  fire: "#FFFFFF",
+  water: "#FFFFFF",
+  bug: "#000000",
+  normal: "#000000",
+  poison: "#000000",
+  electric: "#000000",
+  ground: "#FFFFFF",
+  fairy: "#FFFFFF",
+  fighting: "#FFFFFF",
+  psychic: "#000000",
+  rock: "#FFFFFF",
+  ghost: "#FFFFFF",
+  ice: "#FFFFFF",
+  dragon: "#FFFFFF",
 };
 
 let pokemonsArray = [];
 let pokeImagesArray = [];
 let pokeNamesArray = [];
-
+let pokemonSpeciesArray = [];
 
 async function includeHTML() {
   let includeElements = document.querySelectorAll("[w3-include-html]");
@@ -55,7 +74,6 @@ async function includeHTML() {
   }
 }
 
-
 async function loadPokemon() {
   let url;
   let response;
@@ -65,10 +83,8 @@ async function loadPokemon() {
   let pokemonSpecies;
 
   let content = document.getElementById("poke-content");
- 
- 
 
-  url = "https://pokeapi.co/api/v2/pokemon/charmander"
+  url = "https://pokeapi.co/api/v2/pokemon/charmander";
   response = await fetch(url);
   responseAsJson = await response.json();
   console.log(responseAsJson);
@@ -82,12 +98,14 @@ async function loadPokemon() {
     responseAsJson = await response.json();
 
     pokemonName = responseAsJson["name"];
-    pokemonImage = responseAsJson["sprites"]["other"]["official-artwork"]["front_default"];
+    pokemonImage =
+      responseAsJson["sprites"]["other"]["official-artwork"]["front_default"];
     pokemonSpecies = responseAsJson["types"][0]["type"]["name"];
 
     pokemonsArray.push(responseAsJson);
     pokeImagesArray.push(pokemonImage);
     pokeNamesArray.push(pokemonName);
+    pokemonSpeciesArray.push(pokemonSpecies);
 
     // pokemonName = responseAsJson['forms']['name'];
     console.log(pokemonImage);
@@ -97,7 +115,7 @@ async function loadPokemon() {
 
 function drawPokeCard(pokeName, pokeNumber, pokeImage, pokeSpecies) {
   let content = document.getElementById("poke-content");
-  
+
   content.innerHTML += /*html*/ `
   <div id="pokemon-id-${pokeNumber}" class="pokemon zoom" onclick="openDetails(${pokeNumber})">
     <div id="poke-header-${pokeNumber}" class="pokeHeader">
@@ -110,29 +128,75 @@ function drawPokeCard(pokeName, pokeNumber, pokeImage, pokeSpecies) {
     <div id="poke-type-${pokeNumber}" class="pokeType">${pokeSpecies}</div>
  </div>
  `;
- document.getElementById(`poke-header-${pokeNumber}`).setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
- document.getElementById(`poke-type-${pokeNumber}`).setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
- document.getElementById(`poke-header-${pokeNumber}`).style.color = POKETYPE_FONT_COLORS[pokeSpecies];
- document.getElementById(`poke-type-${pokeNumber}`).style.color = POKETYPE_FONT_COLORS[pokeSpecies];
+  document
+    .getElementById(`poke-header-${pokeNumber}`)
+    .setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
+  document
+    .getElementById(`poke-type-${pokeNumber}`)
+    .setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
+  document.getElementById(`poke-header-${pokeNumber}`).style.color =
+    POKETYPE_FONT_COLORS[pokeSpecies];
+  document.getElementById(`poke-type-${pokeNumber}`).style.color =
+    POKETYPE_FONT_COLORS[pokeSpecies];
+}
+
+function openDetails(givenNumber) {
+  let pokeNumber = givenNumber - 1;
+
+  document.getElementById('main-container').innerHTML += /*html*/`
+    <img id="poke-image-${pokeNumber}" class="pokeImageDetails" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
+  `;
+
+  
+
+  document.getElementById("poke-content").innerHTML = /*html*/ `
+  
+  <div id="pokedex-id" class="pokedex">
+    <div class="pokeDetailsContainer">
+      <h1>${pokeNamesArray[pokeNumber]}</h1>
+      <span id="poke-details-type" class="pokeDetailsType">${pokemonSpeciesArray[pokeNumber]}</span>
+    </div>
+  </div>
+  `;
+
+  document.getElementById("poke-content").innerHTML += /*html*/ `
+  <div id="info-container" class="infoContainer">
+    <div class="specsNavigation">
+      <span id="1"class="specsHeader" onclick="showSpec(id);">About</span>
+      <span id="2" class="specsHeader" onclick="showSpec(id);">Base stats</span>
+      <span id="3" class="specsHeader" onclick="showSpec(id);">Evolution</span>
+      <span id="4" class="specsHeader" onclick="showSpec(id);">Moves</span>
+    </div>
+    <div id="poke-specifications" class="pokeSpecifications"></div>
+  </div>
+  `;
+
+  // set background color of pokedex
+  document.getElementById('pokedex-id').style.backgroundColor = POKETYPE_COLORS[pokemonSpeciesArray[pokeNumber]];
+  document.getElementById('pokedex-id').style.color = POKETYPE_FONT_COLORS[pokemonSpeciesArray[pokeNumber]];
+  document.getElementById('poke-details-type').style.backgroundColor = POKETYPE_DETAILS_COLORS[pokemonSpeciesArray[pokeNumber]];
 }
 
 
-function openDetails(pokeNumber) {
-  document.getElementById('poke-content').innerHTML = /*html*/ `
-  <div class="pokedex">
-    <img id="poke-image-${pokeNumber}" class="pokeImage" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
-  </div>
-  `;
-  
+function showSpec(given_id) {
+  let chosenSpec = Number(given_id);
+  document.getElementById(given_id).style.borderBottom = "2px solid rgb(51, 37, 180)";
+  for (let index = 1; index < 5; index++) {
+    if(index != Number(given_id)) {
+      document.getElementById(`${index}`).style.borderBottomColor = "transparent";
+    }
+  }
+  document.getElementById('poke-specifications').innerHTML = renderSpec(chosenSpec);
+}
 
-document.getElementById('poke-content').innerHTML += /*html*/ `
-<div class="infoContainer">Lala</div>
-`;
+
+function renderSpec(chosenSpec) {
+  
 }
 
 
 function renderPokeImage(pokeNumber) {
- return /*html*/ `
+  return /*html*/ `
   <div id="poke-image-container-${pokeNumber}" class="pokeImageContainer">
       <img id="poke-image-${pokeNumber}" class="pokeImage" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
   </div>`;
