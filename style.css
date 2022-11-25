@@ -141,6 +141,37 @@ body {
     color: rgb(51, 37, 180);
 }
 
+.pokeSpecifications {
+    margin-top: 40px;
+}
+
+.aboutContainer {
+    display: flex;
+}
+
+.aboutHeaders {
+    display: flex;
+    flex-direction: column;
+}
+
+.aboutHeader {
+    margin: 10px;
+    color: rgb(125, 125, 125);
+}
+
+.aboutDescriptions {
+    display: flex;
+    flex-direction: column;
+}
+
+.aboutDesc {
+    margin: 10px;
+}
+
+.pokeAbilities {
+    display: flex;
+}
+
 .pokeType {
     margin: 16px;
     border-radius: 20px;
