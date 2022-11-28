@@ -201,3 +201,20 @@ body {
     min-height: 300px;
     width: 100%;
 }
+
+.barBackground {
+    background-color: rgb(238, 228, 228);
+    height: 4px;
+    border-radius: 3px;
+    margin-left: 15px;
+}
+
+.barWidth {
+    width: 100%;
+}
+
+.bars {
+    height: 4px;
+    background-color: #69C26A;
+    border-radius: 3px;
+}

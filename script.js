@@ -192,6 +192,9 @@ function showSpec(given_id, pokeNumber) {
     }
   }
   document.getElementById('poke-specifications').innerHTML = renderSpec(chosenSpec, pokeNumber);
+  // if(chosenSpec == 2) {
+  //   return setBaseStatsValues(pokeNumber);
+  // }
 }
 
 
@@ -200,21 +203,18 @@ function renderSpec(chosenSpec, pokeNumber) {
   console.log('chosenSpec: ', chosenSpec);
   console.log('pokeNumber: ', pokeNumber);
 
-  if(chosenSpec == 1) {
-    
-    return renderAboutSpecs(pokeHeight, pokeWeight, abilities);
-  }
+  if(chosenSpec == 1) {return renderAboutSpecs(pokeNumber);}
 
   else if(chosenSpec == 2) {
     console.log('chosenSpec: ', chosenSpec);
-    renderBaseStats(pokeNumber);
-    setBaseStatsValues(pokeNumber);
+    return setBaseStatsValues(pokeNumber);
+    // return renderBaseStats(pokeNumber);
   }
 }
 
 
-function renderAboutSpecs(pokeHeight, pokeWeight, abilities) { 
-  console.log(`aboutSpec(${pokeHeight}, ${pokeWeight}, ${abilities}`);
+function renderAboutSpecs(pokeNumber) { 
+  console.log('renderAboutSpecs()');
   let pokeHeight = pokemonsArray[pokeNumber]['height'];
   let pokeWeight = pokemonsArray[pokeNumber]['weight']
   let pokeAbilities = [];
@@ -225,7 +225,8 @@ function renderAboutSpecs(pokeHeight, pokeWeight, abilities) {
   }
   console.log(pokeAbilities);
   let abilities = pokeAbilities.join('     ');
-  console.log('abilities, ', abilities);
+  // console.log('abilities, ', abilities);
+  console.log(`aboutSpec(${pokeHeight}, ${pokeWeight}, ${abilities}`);
   return /*html*/`
 <div class="aboutContainer">
   <div class="aboutHeaders">
@@ -243,8 +244,150 @@ function renderAboutSpecs(pokeHeight, pokeWeight, abilities) {
 }
 
 
-function renderBaseStats(pokeNumber) {
+function setBaseStatsValues(pokeNumber) {
+  console.log('setBaseStatsValues()');
+  let base_stats = [];
+  let hp;
+  let defense;
+  let attack;
+  let specialDefense;
+  let specialAttack;
+  let speed;
+  let total;
+
+  // hp, defense, attack, specialDefense, specialAttack, speed, total = baseStats(pokeNumber);
+  base_stats = baseStats(pokeNumber);
+  hp = base_stats[0];
+  attack = base_stats[1];
+  defense = base_stats[2];
+  specialAttack = base_stats[3];
+  specialDefense = base_stats[4];
+  speed = base_stats[5];
+  total = base_stats[6];
+  
+  console.log('hp', hp);
+  console.log('attack', attack);
+  console.log('defense', defense);
+  console.log('specialAttack', specialAttack);
+  console.log('specialDefense', specialDefense);
+  console.log('speed', speed);
+  console.log('total', total);
+
+  return renderBaseStats(hp, attack, defense, specialAttack, specialDefense, speed, total);
+
+  // document.getElementById('hp-id').setAttribute("aria-valuenow", `${hp}`);
+  // document.getElementById('hp-id').style = `width: ${hp}%`;
+  // document.getElementById('defense-id').setAttribute("aria-valuenow", `${defense}`);
+  // document.getElementById('defense-id').style = `width: ${defense}%`;
+  // document.getElementById('attack-id').setAttribute("aria-valuenow", `${attack}`);
+  // document.getElementById('attack-id').style = `width: ${attack}%`;
+  // document.getElementById('special-attack-id').setAttribute("aria-valuenow", `${specialAttack}`);
+  // document.getElementById('special-attack-id').style = `width: ${specialAttack}%`;
+  // document.getElementById('special-defense-id').setAttribute("aria-valuenow", `${specialDefense}`);
+  // document.getElementById('special-defense-id').style = `width: ${specialDefense}%`;
+  // document.getElementById('speed-id').setAttribute("aria-valuenow", `${speed}`);
+  // document.getElementById('speed-id').style = `width: ${speed}%`;
+  // document.getElementById('total-id').setAttribute("aria-valuenow", `${total}`);
+  // document.getElementById('total-id').style = `width: ${total}%`;
+}
+
+
+function baseStats(pokeNumber) {
+  let pokeBaseStats = [];
+  let hp = pokemonsArray[pokeNumber]['stats'][0]['base_stat'];                // hp
+  let attack = pokemonsArray[pokeNumber]['stats'][1]['base_stat'];            // attack
+  let defense = pokemonsArray[pokeNumber]['stats'][2]['base_stat'];           // defense
+  let specialAttack = pokemonsArray[pokeNumber]['stats'][3]['base_stat'];     // special-attack
+  let specialDefense = pokemonsArray[pokeNumber]['stats'][4]['base_stat'];    // special-defense
+  let speed = pokemonsArray[pokeNumber]['stats'][5]['base_stat'];             // speed
+  let total = hp + defense + attack + specialDefense + specialAttack + speed; // total
+  pokeBaseStats.push(hp);
+  pokeBaseStats.push(attack);
+  pokeBaseStats.push(defense);
+  pokeBaseStats.push(specialAttack);
+  pokeBaseStats.push(specialDefense);
+  pokeBaseStats.push(speed);
+  pokeBaseStats.push(total);
+  return pokeBaseStats;
+}
+
+
+function renderBaseStats(hp, attack, defense, specialAttack, specialDefense, speed, total) {
   console.log('renderBaseStats()');
+  return /*html*/`
+  <div class="aboutContainer">
+    <table style="width: 100%">
+      <tr>
+        <td style="color: grey">HP</td>
+        <td style="text-align: right">${hp}</td>
+        <td class="barWidth">
+          <div class="barBackground">
+            <div class="bars" style="width: ${hp}%"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="color: grey">Defense</td>
+        <td style="text-align: right">${defense}</td>
+        <td>
+          <div class="barBackground">
+            <div class="bars" style="width: ${defense}%"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="color: grey">Attack</td>
+        <td style="text-align: right">${attack}</td>
+        <td>
+          <div class="barBackground">
+            <div class="bars" style="width: ${attack}%"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="color: grey">Special-Defense</td>
+        <td style="text-align: right">${specialDefense}</td>
+        <td>
+          <div class="barBackground">
+            <div class="bars" style="width: ${specialDefense}%"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="color: grey">Special-Attack</td>
+        <td style="text-align: right">${specialAttack}</td>
+        <td>
+          <div class="barBackground">
+            <div class="bars" style="width: ${specialAttack}%"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="color: grey">Speed</td>
+        <td style="text-align: right">${speed}</td>
+        <td>
+          <div class="barBackground">
+            <div class="bars" style="width: ${speed}%"></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="color: grey">Total</td>
+        <td style="text-align: right">${total}</td>
+        <td>
+          <div class="barBackground">
+            <div class="bars" style="width: ${total}%"></div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  `;
+}
+
+
+function renderBaseStats_Bootstrap(pokeNumber) {
+  console.log('renderBaseStats_Bootstrap()');
   return /*html*/`
 <div class="aboutContainer">
   <div class="aboutHeaders">
@@ -283,50 +426,15 @@ function renderBaseStats(pokeNumber) {
 }
 
 
-function setBaseStatsValues(pokeNumber) {
-  console.log('setBaseStatsValues()');
-  let hp;
-  let defense;
-  let attack;
-  let specialDefense;
-  let specialAttack;
-  let speed;
-  let total;
-
-  hp, defense, attack, specialDefense, specialAttack, speed, total = baseStats(pokeNumber);
-
-  document.getElementById('hp-id').setAttribute("aria-valuenow", `${hp}`);
-  document.getElementById('hp-id').style = `width: ${hp}%`;
-  document.getElementById('defense-id').setAttribute("aria-valuenow", `${defense}`);
-  document.getElementById('defense-id').style = `width: ${defense}%`;
-  document.getElementById('attack-id').setAttribute("aria-valuenow", `${attack}`);
-  document.getElementById('attack-id').style = `width: ${attack}%`;
-  document.getElementById('special-attack-id').setAttribute("aria-valuenow", `${specialAttack}`);
-  document.getElementById('special-attack-id').style = `width: ${specialAttack}%`;
-  document.getElementById('special-defense-id').setAttribute("aria-valuenow", `${specialDefense}`);
-  document.getElementById('special-defense-id').style = `width: ${specialDefense}%`;
-  document.getElementById('speed-id').setAttribute("aria-valuenow", `${speed}`);
-  document.getElementById('speed-id').style = `width: ${speed}%`;
-  document.getElementById('total-id').setAttribute("aria-valuenow", `${total}`);
-  document.getElementById('total-id').style = `width: ${total}%`;
-}
-
-
-function baseStats(pokeNumber) {
-  let hp = pokemonsArray[pokeNumber]['base_stat']['name']['hp'];
-  let defense = pokemonsArray[pokeNumber]['base_stat']['name']['defense'];
-  let attack = pokemonsArray[pokeNumber]['base_stat']['name']['attack'];
-  let specialDefense = pokemonsArray[pokeNumber]['base_stat']['name']['special-defense'];
-  let specialAttack = pokemonsArray[pokeNumber]['base_stat']['name']['special-attack'];
-  let speed = pokemonsArray[pokeNumber]['base_stat']['name']['speed'];
-  let total = toString(Number(hp + defense + attack + specialDefense + specialAttack + speed));
-  return hp, defense, attack, specialDefense, specialAttack, speed, total;
-}
-
-
 function renderPokeImage(pokeNumber) {
   return /*html*/ `
   <div id="poke-image-container-${pokeNumber}" class="pokeImageContainer">
       <img id="poke-image-${pokeNumber}" class="pokeImage" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
   </div>`;
+}
+
+function backToMainPage() {
+  let content = document.getElementById("poke-content");
+  content.innerHTML = '';
+  loadPokemon();
 }
