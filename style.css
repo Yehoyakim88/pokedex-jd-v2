@@ -23,7 +23,7 @@ body {
 }
 
 .headerSub img {
-    margin: 32px;
+    margin-right: 16px;
 }
 
 .hovereffect:hover {
@@ -42,6 +42,7 @@ body {
     flex-wrap: wrap;
     padding-left: 32px;
     padding-right: 32px;
+    margin-top: 32px;
 }
 
 .pokemon {
@@ -98,21 +99,23 @@ body {
 }
 
 .pokeImageDetails {
-    position: absolute;
+    /* position: absolute;
     top: 50%;
     left: calc(50% - 128px);
-    z-index: 1;
+    z-index: 1; */
+    margin-left: 100px;
     width: 256px;
     height: 256px;
     object-fit: cover;
 }
 
 .pokeDetailsContainer {
-    position: absolute;
+    /* position: absolute;
     top: 50px;
-    left: 100px;
+    left: 100px; */
     display: flex;
     flex-direction: column;
+    margin-right: 100px;
 }
 
 .pokeDetailsType {
@@ -129,7 +132,7 @@ body {
     align-items: center;
     border-bottom: 2px solid rgb(168, 168, 168);
     /* border-bottom: 2px solid rgb(51, 37, 180); */
-    margin-top: 100px;
+    margin-top: 32px;
 }
 
 .specsHeader {
@@ -185,7 +188,7 @@ body {
     background-color: rgb(219, 33, 33);
     color: white;
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
     justify-content: center;
     align-items: center;
     padding: 24px;
@@ -210,7 +213,7 @@ body {
 }
 
 .barWidth {
-    width: 100%;
+    width: 80%;
 }
 
 .bars {

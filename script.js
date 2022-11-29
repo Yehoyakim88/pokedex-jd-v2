@@ -133,12 +133,8 @@ function drawPokeCard(pokeName, pokeNumber, pokeImage, pokeSpecies) {
     <div id="poke-type-${pokeNumber}" class="pokeType">${pokeSpecies}</div>
  </div>
  `;
-  document
-    .getElementById(`poke-header-${pokeNumber}`)
-    .setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
-  document
-    .getElementById(`poke-type-${pokeNumber}`)
-    .setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
+  document.getElementById(`poke-header-${pokeNumber}`).setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
+  document.getElementById(`poke-type-${pokeNumber}`).setAttribute("style", `background-color: ${POKETYPE_COLORS[pokeSpecies]}`);
   document.getElementById(`poke-header-${pokeNumber}`).style.color =
     POKETYPE_FONT_COLORS[pokeSpecies];
   document.getElementById(`poke-type-${pokeNumber}`).style.color =
@@ -148,11 +144,9 @@ function drawPokeCard(pokeName, pokeNumber, pokeImage, pokeSpecies) {
 function openDetails(givenNumber) {
   let pokeNumber = givenNumber - 1;
 
-  document.getElementById('main-container').innerHTML += /*html*/`
-    <img id="poke-image-${pokeNumber}" class="pokeImageDetails" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
-  `;
-
-  
+  // document.getElementById('main-container').innerHTML += /*html*/`
+  //   <img id="poke-image-${pokeNumber}" class="pokeImageDetails" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
+  // `;  
 
   document.getElementById("poke-content").innerHTML = /*html*/ `
   
@@ -161,6 +155,7 @@ function openDetails(givenNumber) {
       <h1>${pokeNamesArray[pokeNumber]}</h1>
       <span id="poke-details-type" class="pokeDetailsType">${pokemonSpeciesArray[pokeNumber]}</span>
     </div>
+    <img id="poke-image-${pokeNumber}" class="pokeImageDetails" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
   </div>
   `;
 
@@ -374,11 +369,11 @@ function renderBaseStats(hp, attack, defense, specialAttack, specialDefense, spe
       <tr>
         <td style="color: grey">Total</td>
         <td style="text-align: right">${total}</td>
-        <td>
+        <!-- <td>
           <div class="barBackground">
             <div class="bars" style="width: ${total}%"></div>
           </div>
-        </td>
+        </td> -->
       </tr>
     </table>
   </div>
@@ -434,7 +429,15 @@ function renderPokeImage(pokeNumber) {
 }
 
 function backToMainPage() {
-  let content = document.getElementById("poke-content");
-  content.innerHTML = '';
+  // let content = document.getElementById("poke-content");
+  let mainPage =  document.getElementById('main-container');
+  mainPage.innerHTML = '';
+  mainPage.innerHTML = /*html*/`
+   <div id="header-sub" class="headerSub">
+        <img onclick="backToMainPage()" class="hovereffect" src="./img/arrow-88-48.png"/>
+        <img class="hovereffect" src="./img/menu-4-48.png" />
+      </div>
+      <div id="poke-content" class="pokeContent"></div>
+  `;
   loadPokemon();
 }
