@@ -19,7 +19,6 @@ const POKETYPE_COLORS = {
 };
 
 const POKETYPE_DETAILS_COLORS = {
-  // 
   grass: "#bffcc3",
   fire: "#d85237",
   water: "#6ab3fc",
@@ -59,10 +58,8 @@ let pokemonsArray = [];
 let pokeImagesArray = [];
 let pokeNamesArray = [];
 let pokemonSpeciesArray = [];
-
 let specsAvailable = ['none', '']
-
-
+let currentDetailsBgColor;
 
 
 async function includeHTML() {
@@ -79,23 +76,21 @@ async function includeHTML() {
   }
 }
 
+
 async function loadPokemon() {
   let url;
   let response;
   let responseAsJson;
   let pokemonName;
+  let nameArray;
   let pokemonImage;
   let pokemonSpecies;
-
-  let content = document.getElementById("poke-content");
 
   url = "https://pokeapi.co/api/v2/pokemon/charmander";
   response = await fetch(url);
   responseAsJson = await response.json();
-  console.log(responseAsJson);
 
   for (let index = 1; index < 152; index++) {
-    console.log(`loadPokemon(${index})`);
     url = "https://pokeapi.co/api/v2/pokemon/" + index + "/";
     console.log(`Pokemon to load: ${url}`);
 
@@ -103,17 +98,16 @@ async function loadPokemon() {
     responseAsJson = await response.json();
 
     pokemonName = responseAsJson["name"];
-    pokemonImage =
-      responseAsJson["sprites"]["other"]["official-artwork"]["front_default"];
+    nameArray = pokemonName;
+    nameArray = nameArray.charAt(0).toUpperCase() + nameArray.slice(1);
+    pokemonName = nameArray;
+    pokemonImage = responseAsJson["sprites"]["other"]["official-artwork"]["front_default"];
     pokemonSpecies = responseAsJson["types"][0]["type"]["name"];
 
     pokemonsArray.push(responseAsJson);
     pokeImagesArray.push(pokemonImage);
     pokeNamesArray.push(pokemonName);
     pokemonSpeciesArray.push(pokemonSpecies);
-
-    // pokemonName = responseAsJson['forms']['name'];
-    console.log(pokemonImage);
     drawPokeCard(pokemonName, index, pokemonImage, pokemonSpecies);
   }
 }
@@ -143,10 +137,12 @@ function drawPokeCard(pokeName, pokeNumber, pokeImage, pokeSpecies) {
 
 function openDetails(givenNumber) {
   let pokeNumber = givenNumber - 1;
+  let mainContainer = document.getElementById('main-container');
+  let pokeContent = document.getElementById('poke-content');
+  mainContainer.style.height = '100vh'; 
 
-  // document.getElementById('main-container').innerHTML += /*html*/`
-  //   <img id="poke-image-${pokeNumber}" class="pokeImageDetails" src=${pokeImagesArray[pokeNumber]} alt="NOT_FOUND">
-  // `;  
+  let backArrow = document.getElementById('back-arrow');
+  backArrow.classList.remove('d-invisible');
 
   document.getElementById("poke-content").innerHTML = /*html*/ `
   
@@ -173,6 +169,8 @@ function openDetails(givenNumber) {
 
   // set background color of pokedex
   document.getElementById('pokedex-id').style.backgroundColor = POKETYPE_COLORS[pokemonSpeciesArray[pokeNumber]];
+  currentDetailsBgColor = POKETYPE_COLORS[pokemonSpeciesArray[pokeNumber]];
+  document.documentElement.style.setProperty('--hoverColor',currentDetailsBgColor);
   document.getElementById('pokedex-id').style.color = POKETYPE_FONT_COLORS[pokemonSpeciesArray[pokeNumber]];
   document.getElementById('poke-details-type').style.backgroundColor = POKETYPE_DETAILS_COLORS[pokemonSpeciesArray[pokeNumber]];
 }
@@ -187,9 +185,6 @@ function showSpec(given_id, pokeNumber) {
     }
   }
   document.getElementById('poke-specifications').innerHTML = renderSpec(chosenSpec, pokeNumber);
-  // if(chosenSpec == 2) {
-  //   return setBaseStatsValues(pokeNumber);
-  // }
 }
 
 
@@ -203,7 +198,6 @@ function renderSpec(chosenSpec, pokeNumber) {
   else if(chosenSpec == 2) {
     console.log('chosenSpec: ', chosenSpec);
     return setBaseStatsValues(pokeNumber);
-    // return renderBaseStats(pokeNumber);
   }
 }
 
@@ -212,6 +206,7 @@ function renderAboutSpecs(pokeNumber) {
   console.log('renderAboutSpecs()');
   let pokeHeight = pokemonsArray[pokeNumber]['height'];
   let pokeWeight = pokemonsArray[pokeNumber]['weight']
+  let pokeSpecs = document.getElementById('poke-specifications');
   let pokeAbilities = [];
   
   console.log('abilities length: ', pokemonsArray[pokeNumber]['abilities'].length);
@@ -220,27 +215,34 @@ function renderAboutSpecs(pokeNumber) {
   }
   console.log(pokeAbilities);
   let abilities = pokeAbilities.join('     ');
-  // console.log('abilities, ', abilities);
   console.log(`aboutSpec(${pokeHeight}, ${pokeWeight}, ${abilities}`);
+  pokeSpecs.innerHTML = generateAboutHTML(pokeHeight, pokeWeight, abilities);
+}
+
+
+function generateAboutHTML(pokeHeight, pokeWeight, abilities) {
+  console.log('generateAboutHTML');
+  console.log(`pokeHeight ${pokeHeight}`);
+  console.log(`pokeWeight ${pokeWeight}`);
+  console.log(`abilities ${abilities}`);
   return /*html*/`
-<div class="aboutContainer">
-  <div class="aboutHeaders">
-    <span class="aboutHeader">Height</span>
-    <span class="aboutHeader">Weight</span>
-    <span class="aboutHeader">Abilities</span>
+  <div class="aboutContainer">
+    <div class="aboutHeaders">
+      <span class="aboutHeader">Height</span>
+      <span class="aboutHeader">Weight</span>
+      <span class="aboutHeader">Abilities</span>
+    </div>
+    <div class="aboutDescriptions">
+      <span id="poke-height" class="aboutDesc">${pokeHeight}</span>
+      <span id="poke-weight" class="aboutDesc">${pokeWeight}</span>
+     <div id="poke-abilities" class="aboutDesc">${abilities}</div>
+    </div>
   </div>
-  <div class="aboutDescriptions">
-    <span id="poke-height" class="aboutDesc">${pokeHeight}</span>
-    <span id="poke-weight" class="aboutDesc">${pokeWeight}</span>
-   <div id="poke-abilities" class="aboutDesc">${abilities}</div>
-  </div>
-</div>
-`;
+  `;
 }
 
 
 function setBaseStatsValues(pokeNumber) {
-  console.log('setBaseStatsValues()');
   let base_stats = [];
   let hp;
   let defense;
@@ -260,41 +262,25 @@ function setBaseStatsValues(pokeNumber) {
   speed = base_stats[5];
   total = base_stats[6];
   
-  console.log('hp', hp);
-  console.log('attack', attack);
-  console.log('defense', defense);
-  console.log('specialAttack', specialAttack);
-  console.log('specialDefense', specialDefense);
-  console.log('speed', speed);
-  console.log('total', total);
-
   return renderBaseStats(hp, attack, defense, specialAttack, specialDefense, speed, total);
-
-  // document.getElementById('hp-id').setAttribute("aria-valuenow", `${hp}`);
-  // document.getElementById('hp-id').style = `width: ${hp}%`;
-  // document.getElementById('defense-id').setAttribute("aria-valuenow", `${defense}`);
-  // document.getElementById('defense-id').style = `width: ${defense}%`;
-  // document.getElementById('attack-id').setAttribute("aria-valuenow", `${attack}`);
-  // document.getElementById('attack-id').style = `width: ${attack}%`;
-  // document.getElementById('special-attack-id').setAttribute("aria-valuenow", `${specialAttack}`);
-  // document.getElementById('special-attack-id').style = `width: ${specialAttack}%`;
-  // document.getElementById('special-defense-id').setAttribute("aria-valuenow", `${specialDefense}`);
-  // document.getElementById('special-defense-id').style = `width: ${specialDefense}%`;
-  // document.getElementById('speed-id').setAttribute("aria-valuenow", `${speed}`);
-  // document.getElementById('speed-id').style = `width: ${speed}%`;
-  // document.getElementById('total-id').setAttribute("aria-valuenow", `${total}`);
-  // document.getElementById('total-id').style = `width: ${total}%`;
 }
 
 
 function baseStats(pokeNumber) {
   let pokeBaseStats = [];
-  let hp = pokemonsArray[pokeNumber]['stats'][0]['base_stat'];                // hp
-  let attack = pokemonsArray[pokeNumber]['stats'][1]['base_stat'];            // attack
-  let defense = pokemonsArray[pokeNumber]['stats'][2]['base_stat'];           // defense
-  let specialAttack = pokemonsArray[pokeNumber]['stats'][3]['base_stat'];     // special-attack
-  let specialDefense = pokemonsArray[pokeNumber]['stats'][4]['base_stat'];    // special-defense
-  let speed = pokemonsArray[pokeNumber]['stats'][5]['base_stat'];             // speed
+  // let hp = pokemonsArray[pokeNumber]['stats'][0]['base_stat'];                // hp
+  // let attack = pokemonsArray[pokeNumber]['stats'][1]['base_stat'];            // attack
+  // let defense = pokemonsArray[pokeNumber]['stats'][2]['base_stat'];           // defense
+  // let specialAttack = pokemonsArray[pokeNumber]['stats'][3]['base_stat'];     // special-attack
+  // let specialDefense = pokemonsArray[pokeNumber]['stats'][4]['base_stat'];    // special-defense
+  // let speed = pokemonsArray[pokeNumber]['stats'][5]['base_stat'];             // speed
+  let hp = getBaseStatsValues(pokeNumber, 0);
+  let attack = getBaseStatsValues(pokeNumber, 1);
+  let defense = getBaseStatsValues(pokeNumber, 2);
+  let specialAttack = getBaseStatsValues(pokeNumber, 3);
+  let specialDefense = getBaseStatsValues(pokeNumber, 4);
+  let speed = getBaseStatsValues(pokeNumber, 5);
+
   let total = hp + defense + attack + specialDefense + specialAttack + speed; // total
   pokeBaseStats.push(hp);
   pokeBaseStats.push(attack);
@@ -306,6 +292,10 @@ function baseStats(pokeNumber) {
   return pokeBaseStats;
 }
 
+
+function getBaseStatsValues(pokeNumber, value) {
+  return pokemonsArray[pokeNumber]['stats'][value]['base_stat'];
+}
 
 function renderBaseStats(hp, attack, defense, specialAttack, specialDefense, speed, total) {
   console.log('renderBaseStats()');
@@ -369,11 +359,6 @@ function renderBaseStats(hp, attack, defense, specialAttack, specialDefense, spe
       <tr>
         <td style="color: grey">Total</td>
         <td style="text-align: right">${total}</td>
-        <!-- <td>
-          <div class="barBackground">
-            <div class="bars" style="width: ${total}%"></div>
-          </div>
-        </td> -->
       </tr>
     </table>
   </div>
@@ -428,16 +413,17 @@ function renderPokeImage(pokeNumber) {
   </div>`;
 }
 
+
 function backToMainPage() {
-  // let content = document.getElementById("poke-content");
   let mainPage =  document.getElementById('main-container');
+  let backArrow = document.getElementById('back-arrow');
   mainPage.innerHTML = '';
   mainPage.innerHTML = /*html*/`
-   <div id="header-sub" class="headerSub">
-        <img onclick="backToMainPage()" class="hovereffect" src="./img/arrow-88-48.png"/>
-        <img class="hovereffect" src="./img/menu-4-48.png" />
-      </div>
-      <div id="poke-content" class="pokeContent"></div>
+  <div id="header-sub" class="headerSub">
+    <div id="back-arrow" class="backToMainPageArrow d-invisible"><img onclick="backToMainPage()" src="./img/arrow-88-48.png"/></div>
+  </div>
+  <div id="poke-content" class="pokeContent"></div>
   `;
+  backArrow.classList.add('d-invisible');
   loadPokemon();
 }

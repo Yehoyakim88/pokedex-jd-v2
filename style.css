@@ -1,10 +1,13 @@
 body {
     margin: 0;
-    background-color: rgba(190, 187, 187, 1);
 }
 
 .d-none {
-    display: none;
+    display: none !important;
+}
+
+.d-invisible {
+    visibility: hidden !important;
 }
 
 .zoom {
@@ -16,15 +19,24 @@ body {
     cursor: pointer;
 }
 
+.backToMainPageArrow {
+    border-top-left-radius: 10px;
+}
+
+.backToMainPageArrow:hover {
+    cursor: pointer;
+    background-color: var(--hoverColor);
+}
+
 .headerSub {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
 
-.headerSub img {
+/* .headerSub img {
     margin-right: 16px;
-}
+} */
 
 .hovereffect:hover {
     cursor: pointer;
@@ -32,17 +44,21 @@ body {
 }
 
 .main {
-    background-color: rgb(255, 255, 255);
+    /* background-color: rgb(255, 255, 255); */
+    background-color: #141D2F;
     border-radius: 10px;
-    margin: 20px;
+    /* margin: 20px; */
+    height: fit-content;
 }
 
 .pokeContent {
     display: flex;
     flex-wrap: wrap;
-    padding-left: 32px;
-    padding-right: 32px;
-    margin-top: 32px;
+    justify-content: center;
+    padding-left: 48px;
+    padding-right: 48px;
+    /* margin-top: 32px; */
+    border-radius: 100%;
 }
 
 .pokemon {
@@ -146,6 +162,7 @@ body {
 
 .pokeSpecifications {
     margin-top: 40px;
+    padding: 16px;
 }
 
 .aboutContainer {
@@ -197,7 +214,7 @@ body {
 
 .infoContainer {
     z-index: 1;
-    background-color: white;
+    background-color: #f8f9fa;
     border-top-left-radius: 40px;
     border-top-right-radius: 40px;
     margin-top: -40px;
@@ -220,4 +237,8 @@ body {
     height: 4px;
     background-color: #69C26A;
     border-radius: 3px;
+}
+
+:root {
+    --hoverColor: #ffff;
 }
