@@ -184,7 +184,7 @@ function showSpec(given_id, pokeNumber) {
       document.getElementById(`${index}`).style.borderBottomColor = "transparent";
     }
   }
-  document.getElementById('poke-specifications').innerHTML = renderSpec(chosenSpec, pokeNumber);
+  renderSpec(chosenSpec, pokeNumber);
 }
 
 
@@ -193,11 +193,11 @@ function renderSpec(chosenSpec, pokeNumber) {
   console.log('chosenSpec: ', chosenSpec);
   console.log('pokeNumber: ', pokeNumber);
 
-  if(chosenSpec == 1) {return renderAboutSpecs(pokeNumber);}
+  if(chosenSpec == 1) {renderAboutSpecs(pokeNumber);}
 
   else if(chosenSpec == 2) {
     console.log('chosenSpec: ', chosenSpec);
-    return setBaseStatsValues(pokeNumber);
+    document.getElementById('poke-specifications').innerHTML = setBaseStatsValues(pokeNumber);
   }
 }
 
